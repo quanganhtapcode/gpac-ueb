@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Group, Member, Expense } from '../types';
-import { getGroup, getGroupExpenses } from '../services/firebaseService';
+import { getGroupExpenses } from '../services/firebaseService';
 
 interface GroupContextType {
   currentGroup: Group | null;
@@ -33,7 +33,7 @@ export const GroupProvider: React.FC<GroupProviderProps> = ({ children }) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const refreshExpenses = async () => {
+  const refreshExpenses = useCallback(async () => {
     if (!currentGroup) return;
     
     setIsLoading(true);
@@ -45,7 +45,7 @@ export const GroupProvider: React.FC<GroupProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentGroup]);
 
   const addExpense = (expense: Expense) => {
     setExpenses(prev => [expense, ...prev]);
@@ -55,7 +55,7 @@ export const GroupProvider: React.FC<GroupProviderProps> = ({ children }) => {
     if (currentGroup) {
       refreshExpenses();
     }
-  }, [currentGroup]);
+  }, [currentGroup, refreshExpenses]);
 
   const value: GroupContextType = {
     currentGroup,

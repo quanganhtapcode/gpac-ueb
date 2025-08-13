@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus } from 'lucide-react';
+import { X } from 'lucide-react';
 import { createExpense } from '../services/firebaseService';
 import { Expense, Member } from '../types';
 import { formatCurrency } from '../utils/groupUtils';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Users, QrCode, Copy, Check } from 'lucide-react';
+import { Plus, Users, QrCode } from 'lucide-react';
 import { generateGroupId } from '../utils/groupUtils';
 import { createGroup, checkGroupExists } from '../services/firebaseService';
 import { useGroup } from '../context/GroupContext';
@@ -14,7 +14,6 @@ const StartScreen: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [showQR, setShowQR] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const handleCreateRoom = async () => {
     if (!userName.trim()) {
@@ -84,11 +83,7 @@ const StartScreen: React.FC = () => {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

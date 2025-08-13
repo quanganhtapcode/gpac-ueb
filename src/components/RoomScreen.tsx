@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Calculator, Copy, Check, ArrowLeft, Users } from 'lucide-react';
 import { useGroup } from '../context/GroupContext';
@@ -24,15 +24,7 @@ const RoomScreen: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (groupId && !currentGroup) {
-      loadGroup();
-    } else if (currentGroup) {
-      setIsLoading(false);
-    }
-  }, [groupId, currentGroup]);
-
-  const loadGroup = async () => {
+  const loadGroup = useCallback(async () => {
     if (!groupId) return;
     
     try {
@@ -60,7 +52,15 @@ const RoomScreen: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [groupId, currentMember, navigate, setCurrentGroup, setCurrentMember]);
+
+  useEffect(() => {
+    if (groupId && !currentGroup) {
+      loadGroup();
+    } else if (currentGroup) {
+      setIsLoading(false);
+    }
+  }, [groupId, currentGroup, loadGroup]);
 
   const copyRoomCode = () => {
     if (currentGroup) {
